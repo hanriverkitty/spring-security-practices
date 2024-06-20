@@ -41,7 +41,7 @@ import java.util.List;
 public class SecurityConfig00 {
     @Bean
     public FilterChainProxy springSecurityFilterChain() {
-        List<SecurityFilterChain> SecurityFilterChains = Arrays.asList(
+        List<SecurityFilterChain> securityFilterChains = Arrays.asList(
                 new DefaultSecurityFilterChain(new AntPathRequestMatcher("/favicon.ico")),
                 new DefaultSecurityFilterChain(new AntPathRequestMatcher("/assets/**")),
                 new DefaultSecurityFilterChain(new AntPathRequestMatcher("/**"),
@@ -54,7 +54,7 @@ public class SecurityConfig00 {
                 )
         );
 
-        return new FilterChainProxy(SecurityFilterChains);
+        return new FilterChainProxy(securityFilterChains);
     }
 
 
