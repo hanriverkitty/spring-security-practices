@@ -1,4 +1,13 @@
-package ex04.config;
+package ex03.config;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.servlet.Filter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,32 +22,22 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.DelegatingFilterProxy;
 
-import javax.servlet.Filter;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes={WebConfig.class, SecurityConfig03.class})
+@ContextConfiguration(classes={WebConfig.class,SecurityConfig02.class})
 @WebAppConfiguration
-public class SecurityConfig03Test {
+public class SecurityConfig02Test {
     private MockMvc mvc;
-
     private FilterChainProxy filterChainProxy;
 
     @BeforeEach
     public void setup(WebApplicationContext context) {
         filterChainProxy = (FilterChainProxy)context.getBean("springSecurityFilterChain", Filter.class);
-
         mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .addFilter(new DelegatingFilterProxy(filterChainProxy), "/*")
                 .build();
     }
+
     @Test
     public void testSecurityFilterChains() {
         List<SecurityFilterChain> SecurityFilterChains = filterChainProxy.getFilterChains();
@@ -50,12 +49,8 @@ public class SecurityConfig03Test {
         SecurityFilterChain securityFilterChain = filterChainProxy.getFilterChains().get(1);
         List<Filter> filters =  securityFilterChain.getFilters();
 
-        assertEquals(16, filters.size());
+        assertEquals(11, filters.size());
         System.out.println(filters.size());
-        
-        // 16th FilterSecurityInterceptor
-        assertEquals("FilterSecurityInterceptor",filters.get(9).getClass().getSimpleName());
-        
         // All Filters
         for(Filter filter : filters) {
             System.out.println(filter.getClass());
